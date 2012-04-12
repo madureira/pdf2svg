@@ -1,0 +1,7 @@
+execution.log
+tools/__init__.pyc
+tools/directories.pyc
+tools/pdf.pyc
+pdf/
+svg/
+tmp/
