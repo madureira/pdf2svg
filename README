@@ -18,4 +18,6 @@ How to use:
     3 - Execute the main.py again.
     $ python main.py
 
-    4 - Wait the conversion finished.
+    4 - Wait the conversion finished, open the execution.log to know when the conversion finished.
+
+    5 - Catch the svg file into svg/ directory.
