@@ -41,7 +41,7 @@ for newdir in dirs:
 	now.createDirIfNotExist(newdir, currentpath)
 
 
-# Normalize name of the pdfs and cut and paste pdf in respective dir.
+# Normalize pdf names, cut and paste pdf in respective dir.
 logthis('\nNormalize name of the pdfs.\n')
 now.normalizeNameOfPdfs(listdir(tmpdir), tmpdir)
 
@@ -56,12 +56,12 @@ for pdfnamedir in listdir(tmpdir):
 	now.createDirStructure(svgdir + sep + pdfnamedir)
 
 
-# Cut the pdf of tmp dir to pdf name dir.
+# Cut the pdf on tmp dir to pdf name dir.
 logthis('\nCut the pdf files of %s to %s.\n' %(tmpdir + '/', pdfdir + '/'))
 now.cutFiles(tmpdir, pdfdir)
 
 
-# Performs the separate pages process
+# Performs the separate pages process.
 action = Explode()
 for currentdir in listdir(pdfdir):
 	logthis('Performs the separate pdf pages on %s.' %(pdfdir + sep + currentdir))
