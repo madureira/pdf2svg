@@ -12,24 +12,24 @@ svgdir = 'svg'
 logfile = 'execution.log'
 
 try:
-	if path.isfile(logfile):
-		remove(logfile)
-	out = open(logfile, 'w')
+    if path.isfile(logfile):
+        remove(logfile)
+	    out = open(logfile, 'w')
 	out.close()
 except error, value:
-	print value[1]
+    print value[1]
 
 
 dirs = [tmpdir, pdfdir, svgdir]
 
 def logthis(newtext):
-	log = currentpath + sep + logfile
-	input = open(log, 'r')
-	text = input.read()
-	input.close()
-	output = open(log, 'w')
-	output.write(text + newtext +'\n')
-	output.close()
+    log = currentpath + sep + logfile
+    input = open(log, 'r')
+    text = input.read()
+    input.close()
+    output = open(log, 'w')
+    output.write(text + newtext +'\n')
+    output.close()
 
 logthis(time.ctime())
 logthis('\nBegin the convertion\n\n')
@@ -38,8 +38,8 @@ logthis('\nBegin the convertion\n\n')
 # Creates a directory structure.
 now = Build()
 for newdir in dirs:
-	logthis('Create a directory structure to: %s.' % newdir)
-	now.createDirIfNotExist(newdir, currentpath)
+    logthis('Create a directory structure to: %s.' % newdir)
+    now.createDirIfNotExist(newdir, currentpath)
 
 
 # Normalize pdf names, cut and paste pdf in respective dir.
@@ -49,12 +49,12 @@ now.normalizeNameOfPdfs(listdir(tmpdir), tmpdir)
 
 # Buid the dir structure for pdf and svg.
 for pdfnamedir in listdir(tmpdir):
-	pdfnamedir = pdfnamedir.replace('.pdf', '')
+    pdfnamedir = pdfnamedir.replace('.pdf', '')
 	
-	logthis('Create a directory structure to: %s.' % (pdfdir + sep + pdfnamedir))
-	now.createDirStructure(pdfdir + sep + pdfnamedir)
-	logthis('Create a directory structure to: %s.' % (svgdir + sep + pdfnamedir))
-	now.createDirStructure(svgdir + sep + pdfnamedir)
+    logthis('Create a directory structure to: %s.' % (pdfdir + sep + pdfnamedir))
+    now.createDirStructure(pdfdir + sep + pdfnamedir)
+    logthis('Create a directory structure to: %s.' % (svgdir + sep + pdfnamedir))
+    now.createDirStructure(svgdir + sep + pdfnamedir)
 
 
 # Cut the pdf on tmp dir to pdf name dir.
@@ -65,16 +65,16 @@ now.cutFiles(tmpdir, pdfdir)
 # Performs the separate pages process.
 action = Explode()
 for currentdir in listdir(pdfdir):
-	logthis('Performs the separate pdf pages on %s.' %(pdfdir + sep + currentdir))
-	action.explodePages(pdfdir + sep + currentdir)
+    logthis('Performs the separate pdf pages on %s.' %(pdfdir + sep + currentdir))
+    action.explodePages(pdfdir + sep + currentdir)
 
 
 # Convert each pdf page to svg file
 action = ConvertToSVG()
 logthis('\n')
 for currentdir in listdir(pdfdir):
-	logthis('Converting each pdf page of %s to svg' %(pdfdir + sep + currentdir))
-	action.converPdfToSvg(pdfdir + sep + currentdir, svgdir + sep + currentdir)
+    logthis('Converting each pdf page of %s to svg' %(pdfdir + sep + currentdir))
+    action.converPdfToSvg(pdfdir + sep + currentdir, svgdir + sep + currentdir)
 
 
 logthis('Finish conversions.')
