@@ -34,6 +34,7 @@ def logthis(newtext):
 logthis(time.ctime())
 logthis('\nBegin the convertion\n\n')
 
+
 # Creates a directory structure.
 now = Build()
 for newdir in dirs:
