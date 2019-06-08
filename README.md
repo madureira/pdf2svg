@@ -1,5 +1,5 @@
 # pdf2svg
-This small application written in Python, converts PDF files into SVG files.
+This application converts PDFs to SVG files.
 
 ## Dependencies:
 - [python3](https://www.python.org/downloads/)
