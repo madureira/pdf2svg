@@ -1,7 +1,6 @@
-execution.log
-tools/__init__.pyc
-tools/directories.pyc
-tools/pdf.pyc
+*.pyc
+.idea
 pdf/
 svg/
-tmp/
+venv/
+tmp/*.pdf

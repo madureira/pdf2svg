@@ -1,80 +1,68 @@
 #!/usr/bin/python
-from os import getcwd, listdir, sep, remove, error, path
+from os import getcwd, listdir, sep
 from tools.directories import Build
 from tools.pdf import Explode, ConvertToSVG
 import time
 
+
 # Directories names
-currentpath = getcwd()
-tmpdir = 'tmp'
-pdfdir = 'pdf'
-svgdir = 'svg'
-logfile = 'execution.log'
-
-try:
-    if path.isfile(logfile):
-        remove(logfile)
-	    out = open(logfile, 'w')
-	out.close()
-except error, value:
-    print value[1]
+current_path = getcwd()
+tmp_dir = 'tmp'
+pdf_dir = 'pdf'
+svg_dir = 'svg'
+dirs = [tmp_dir, pdf_dir, svg_dir]
 
 
-dirs = [tmpdir, pdfdir, svgdir]
+def log(new_text):
+    print(new_text)
 
-def logthis(newtext):
-    log = currentpath + sep + logfile
-    input = open(log, 'r')
-    text = input.read()
-    input.close()
-    output = open(log, 'w')
-    output.write(text + newtext +'\n')
-    output.close()
 
-logthis(time.ctime())
-logthis('\nBegin the convertion\n\n')
+log(time.ctime())
+log('\nBegin the conversion\n\n')
+
+
+build = Build()
 
 
 # Creates a directory structure.
-now = Build()
-for newdir in dirs:
-    logthis('Create a directory structure to: %s.' % newdir)
-    now.createDirIfNotExist(newdir, currentpath)
+for new_dir in dirs:
+    log('Create a directory structure to: %s.' % new_dir)
+    build.ensure_dir(new_dir, current_path)
 
 
 # Normalize pdf names, cut and paste pdf in respective dir.
-logthis('\nNormalize name of the pdfs.\n')
-now.normalizeNameOfPdfs(listdir(tmpdir), tmpdir)
+log('\nNormalize PDF\'s names.\n')
+build.normalize_pdf_names(listdir(tmp_dir), tmp_dir)
 
 
-# Buid the dir structure for pdf and svg.
-for pdfnamedir in listdir(tmpdir):
-    pdfnamedir = pdfnamedir.replace('.pdf', '')
-	
-    logthis('Create a directory structure to: %s.' % (pdfdir + sep + pdfnamedir))
-    now.createDirStructure(pdfdir + sep + pdfnamedir)
-    logthis('Create a directory structure to: %s.' % (svgdir + sep + pdfnamedir))
-    now.createDirStructure(svgdir + sep + pdfnamedir)
+# Build the dir structure for pdf and svg.
+for pdf_dir_name in listdir(tmp_dir):
+    if pdf_dir_name != '.keep':
+        pdf_dir_name = pdf_dir_name.replace('.pdf', '')
+        log('Create a directory structure to: %s.' % (pdf_dir + sep + pdf_dir_name))
+        build.create_dir_structure(pdf_dir + sep + pdf_dir_name)
+        log('Create a directory structure to: %s.' % (svg_dir + sep + pdf_dir_name))
+        build.create_dir_structure(svg_dir + sep + pdf_dir_name)
 
 
-# Cut the pdf on tmp dir to pdf name dir.
-logthis('\nCut the pdf files of %s to %s.\n' %(tmpdir + '/', pdfdir + '/'))
-now.cutFiles(tmpdir, pdfdir)
+# Cut the pdf on tmp dir from pdf name dir.
+log('\nCut the pdf files from %s to %s.\n' % (tmp_dir + '/', pdf_dir + '/'))
+build.cut_files(tmp_dir, pdf_dir)
 
 
 # Performs the separate pages process.
 action = Explode()
-for currentdir in listdir(pdfdir):
-    logthis('Performs the separate pdf pages on %s.' %(pdfdir + sep + currentdir))
-    action.explodePages(pdfdir + sep + currentdir)
+for current_dir in listdir(pdf_dir):
+    log('Performs the separate pdf pages on %s.' % (pdf_dir + sep + current_dir))
+    action.explode_pages(pdf_dir + sep + current_dir)
 
 
 # Convert each pdf page to svg file
 action = ConvertToSVG()
-logthis('\n')
-for currentdir in listdir(pdfdir):
-    logthis('Converting each pdf page of %s to svg' %(pdfdir + sep + currentdir))
-    action.converPdfToSvg(pdfdir + sep + currentdir, svgdir + sep + currentdir)
+log('\n')
+for current_dir in listdir(pdf_dir):
+    log('Converting each pdf page of %s to svg' % (pdf_dir + sep + current_dir))
+    action.convert_pdf_to_svg(pdf_dir + sep + current_dir, svg_dir + sep + current_dir)
 
 
-logthis('Finish conversions.')
+log('\n\nConversion finish!')
